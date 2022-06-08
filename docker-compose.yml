@@ -1,0 +1,14 @@
+version: '3.1'
+services:
+  db:
+    image: mysql
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+    - "3308:3308"
+    volumes:
+    - projetoEstoque_data:/var/lib/mysql
+
+volumes:
+  projetoEstoque_data:
