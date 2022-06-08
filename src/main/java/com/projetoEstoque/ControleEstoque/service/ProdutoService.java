@@ -1,6 +1,7 @@
 package com.projetoEstoque.ControleEstoque.service;
 
 import com.projetoEstoque.ControleEstoque.domain.Produto;
+import com.projetoEstoque.ControleEstoque.mapper.ProdutoMapper;
 import com.projetoEstoque.ControleEstoque.repository.ProdutoRepository;
 import com.projetoEstoque.ControleEstoque.requests.ProdutoPostRequestBody;
 import com.projetoEstoque.ControleEstoque.requests.ProdutoPutRequestBody;
@@ -26,7 +27,7 @@ public class ProdutoService {
     }
 
     public Produto save(ProdutoPostRequestBody produtoPostRequestBody) {
-        return produtoRepository.save(Produto.builder().name(produtoPostRequestBody.getName()).build());
+        return produtoRepository.save(ProdutoMapper.INSTANCE.toProduto(produtoPostRequestBody));
     }
 
     public void delete(long id) {
@@ -34,11 +35,9 @@ public class ProdutoService {
     }
 
     public void replace(ProdutoPutRequestBody produtoPutRequestBody) {
-        findByIdOrThrowBadRequestException(produtoPutRequestBody.getId());
-        Produto produto = Produto.builder()
-                .id(produtoPutRequestBody.getId())
-                .name(produtoPutRequestBody.getName())
-                .build();
+        Produto savedProduto= findByIdOrThrowBadRequestException(produtoPutRequestBody.getId());
+        Produto produto = ProdutoMapper.INSTANCE.toProduto(produtoPutRequestBody);
+        produto.setId(savedProduto.getId());
         produtoRepository.save(produto);
     }
 }
